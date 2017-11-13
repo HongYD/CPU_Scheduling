@@ -69,9 +69,59 @@ int accept()
 }
 void ganttfcfs(int n)
 {
-	int i;
+	//int i, j;
+	//p[1].st = p[1].at;
+	//for (i = 2; i < n; i++)
+	//{
+	//	//p[i]的开始时间就是上一个进程的开始时间加上一个进程的运行时间（burst time)
+	//	p[i].st = p[i - 1].st + p[i - 1].bt;
+	//}
+	//p[1].ft =p[1].at+p[1].bt;
+	//for (i = 2; i <= n; i++)
+	//{
+	//	//p[i]的结束时间是上一个进程的结束时间加上上一个进程的运行时间(burst time)
+	//	p[i].ft = p[i - 1].ft + p[i].bt;
+	//}
+	//printf("  ");
+	//for (i = 1; i < n; i++)
+	//{
+	//	for (int j = 0; j < p[i].bt; j++)printf("--");
+	//	printf("  ");
+	//}
+	//printf("\n|");
+
+	//for (i = 1; i < n; i++)
+	//{
+	//	for (j = 0; j < p[i].bt - 1; j++)printf("  ");
+	//	printf("P%d",p[i].id);
+	//	for (j = 0; j < p[i].bt - 1; j++)printf("  ");
+	//	printf("|");
+	//}
+	//printf("\n ");
+
+	//for (i = 1; i < n; i++)
+	//{
+	//	for (j = 0; j < p[i].bt - 1; j++)printf("--");
+	//	printf("  ");
+	//}
+	//printf("\n");
+
+
+	//printf("0");
+	//for (i = 1; i < n; i++)
+	//{
+	//	for (j = 0; j < p[i].bt; j++)printf("  ");
+	//	if (p[i].tat>9)printf("\b");
+	//	printf("%d", p[i].ft);
+	//}
+	//printf("\n");
+
+
+
+
+	int i,j;
 	p[1].st = p[1].at;
-	for (i = 2; i < n; i++)
+	for (i = 2; i <= n; i++)
 	{
 		//p[i]的开始时间就是上一个进程的开始时间加上一个进程的运行时间（burst time)
 		p[i].st = p[i - 1].st + p[i - 1].bt;
@@ -83,14 +133,64 @@ void ganttfcfs(int n)
 		p[i].ft = p[i - 1].ft + p[i].bt;
 	}
 	printf("\nGantt Chart is as follows:\n\n");
-	printf("%d->P%d->%d",p[1].st,p[1].id,p[1].ft);
+	//print the top bar:
+	printf(" ");
+	for (i = 1; i <= n; i++)
+	{
+		for (j = 0; j <= p[i].bt; j++)
+		{
+			printf("--");
+		}
+		printf(" ");
+	}
+	printf("\n|");
+	//print the process id at middle:
+	for (i = 1; i <= n; i++)
+	{
+		for (j = 0; j <= p[i].bt-1; j++)
+		{
+			printf(" ");
+		}
+		printf("P%d", p[i].id);
+		for (j = 0; j <= p[i].bt-1; j++)
+		{
+			printf(" ");
+		}
+		printf("|");
+	}
+	printf("\n");
+	//print the button
+	printf(" ");
+	for (i = 1; i <= n; i++)
+	{
+		for (j = 0; j <= p[i].bt; j++)
+		{
+			printf("--");
+		}
+		printf(" ");
+	}
+	printf("\n");
+	printf("0");
+	//print the time line
+	for (i = 1; i <= n; i++)
+	{
+		for (j = 0; j <= p[i].bt; j++)
+		{
+			printf("  ");
+		}
+		if (p[i].ft > 9)printf("\b");
+		printf("%d", p[i].ft);
+	}
+
+	/*printf("%d->P%d->%d",p[1].st,p[1].id,p[1].ft);
 	for (i = 2; i <= n; i++)
 	{
 		printf("");
 		printf("|P%d->%d",p[i].id, p[i].ft);
 	}
 	printf("|");
-	printf("\n");
+	printf("\n");*/
+
 }
 
 void turnwait(int n)
@@ -111,8 +211,8 @@ void turnwait(int n)
 void display(int n)
 {
 	int i;
-	printf("\n\n----------------------------------------Result\tTable----------------------------------------");
-	printf("\nProcess\tAT\tBT\tFT\tTAT\t\tWT");
+	printf("\n\n----------------------------------------Result\tTable----------------------------------------\n");
+	printf("\nProcess\tAT\tBT\tFT\tTAT\tWT");
 	for (i = 1; i <= n; i++)
 	{
 		printf("\nP%d\t%d\t%d\t%d\t%.2f\t%.2f",p[i].id,p[i].at,p[i].bt,p[i].ft,p[i].tat,p[i].wt);
@@ -120,5 +220,5 @@ void display(int n)
 	printf("\n\n----------------------------------------Result\tTable----------------------------------------");
 
 	printf("\nAverage Turn Around Time:%.2f",p[0].tat);
-	printf("\nAverage Waiting Time:%.2f",p[0].wt);
+	printf("\nAverage Waiting Time:%.2f\n",p[0].wt);
 }
