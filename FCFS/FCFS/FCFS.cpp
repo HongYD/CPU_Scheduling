@@ -134,6 +134,8 @@ void ganttfcfs(int n)
 	}
 	printf("\nGantt Chart is as follows:\n\n");
 	//print the top bar:
+	
+
 	printf(" ");
 	for (i = 1; i <= n; i++)
 	{
