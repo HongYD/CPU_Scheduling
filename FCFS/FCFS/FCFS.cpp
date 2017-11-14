@@ -146,7 +146,7 @@ void ganttfcfs(int n)
 		printf(" ");
 	}
 	printf("\n|");
-	//print the process id at middle:
+	//print the process id at middle!:
 	for (i = 1; i <= n; i++)
 	{
 		for (j = 0; j <= p[i].bt-1; j++)
