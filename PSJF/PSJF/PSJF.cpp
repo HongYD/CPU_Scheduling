@@ -1,9 +1,9 @@
 #include<stdio.h>
-typedef struct nonpresjf
+typedef struct presjf
 {
 	int at, bt, ft, tat, wt;
-}nonpresjf;
-nonpresjf p[20], p1[20];
+}presjf;
+presjf p[20], p1[20];
 
 int main()
 {
