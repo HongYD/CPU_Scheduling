@@ -3,6 +3,8 @@
 struct times
 {
 	int p, art, but, wtt, tat, rnt;
+	//rnt:剩余的执行时间
+	//p:编号
 };
 
 
@@ -28,6 +30,12 @@ void sortart(struct times a[], int pro)
 int main()
 {
 	int i, j, pro, time, remain, flag = 0, ts;
+	//pro:process的数量
+	//remain:剩余的process的数量
+	//flag:
+	//ts:time quantum
+	//time:现在进行时间
+
 	struct times a[100];
 	float avgwt = 0, avgtt = 0;
 	printf("Round Robin Scheduling Algorithm\n");
