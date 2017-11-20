@@ -73,6 +73,7 @@ int main()
 
 		case 4:
 			n = accept_inputs(ch);
+			shortest_job_sort(n);
 			gantt_priority_sch(n);
 			turnwait(n);
 			display(n);
@@ -94,9 +95,13 @@ int main()
 	return 0;
 }
 
-int accept(int ch)
+int accept_inputs(int ch)
 {
 	int i, n;
+
+	printf("\n\n**********************CAREFUL*************************\n");
+	printf("*1: Arrival Time  at least one process should be 0\n");
+	printf("*2: CPU should never be idle\n\n");
 	
 	printf("\nEnter the number of process: ");
 	scanf("%d",&n);
@@ -140,10 +145,10 @@ int accept(int ch)
 		}
 		else
 		{
-			printf("\nP%d\t%d\t%d", p[i].id, p[i].at, p[i].bt);
+			printf("\nP%d\t%d\t%d\t%c", p[i].id, p[i].at, p[i].bt,'X');
 		}
 	}
-	printf("==============================================================");
+	printf("\n==============================================================");
 	for (i = 1; i <= n; i++)
 	{
 		p1[i] = p[i];
@@ -204,7 +209,7 @@ void gantt_nsjf(int n)
 {
 	int i, limit, nextval, m, min;
 
-	p[0].wt = p[0].tat;
+	p[0].wt = p[0].tat=0;
 	limit = p[1].at;
 
 	for (i = 1; i <= n; i++)
@@ -213,7 +218,7 @@ void gantt_nsjf(int n)
 	}
 	for (i = 1; i <= n; i++)
 	{
-		p1[n] = p[i];
+		p1[i] = p[i];
 	}
 	printf("\n\nGantt Chart is as follow: ");
 	printf("%d", p[1].at);
@@ -222,38 +227,42 @@ void gantt_nsjf(int n)
 	do
 	{
 		min = 9999;
-		for (i = 1; p[i].at <= nextval&&i <= n; i++)
+		for (i = 1; p[i].at <= nextval&& i <= n; i++)
 		{
 			if (p[i].bt < min&&p[i].bt>0)
 			{
 				m = i;
 				min = p[i].bt;
 			}
+		}
 			nextval += p[m].bt;
 			p[m].bt = 0;
-			printf("->P%d",m,nextval);
+			printf("->P%d->%d", m, nextval);
 			if (p[m].bt == 0)
 			{
 				p[m].ft = nextval;
 				p[m].tat = p[m].ft - p[m].at;
-				p[m].wt = p[m].tat = p1[m].bt;
+				p[m].wt = p[m].tat - p1[m].bt;
 				p[0].tat += p[m].tat;
 				p[0].wt += p[m].wt;
 			}
-		}
+		
 	} while (nextval < limit);
+
+
 	p[0].tat = p[0].tat / n;
 	p[0].wt = p[0].wt / n;
 
-	printf("\n\n-------------------------TABLE-------------------------\n");
+	///*printf("\n\n-------------------------TABLE-------------------------\n");
 
-	printf("\nProcess\tAT\tBT\tFT\tTAT\tWT\n");
-	for (i = 1; i <= n; i++)
-	{
-		printf("\nP%d\t%d\t%d\t%d\t%d\t%d\n", i, p[i].at, p1[i].bt, p[i].ft, p[i].tat, p[i].wt);
-	}
-	printf("\n\n-------------------------------------------------------\n");
+	//printf("\nProcess\tAT\tBT\tFT\tTAT\tWT\n");
+	//for (i = 1; i <= n; i++)
+	//{
+	//	printf("\nP%d\t%d\t%d\t%d\t%d\t%d\n", i, p[i].at, p1[i].bt, p[i].ft, p[i].tat, p[i].wt);
+	//}
+	//printf("\n\n--------------------*/-----------------------------------\n");
 }
+
 
 void gantt_psjf(int n)
 {
@@ -291,8 +300,9 @@ void gantt_psjf(int n)
 
 		if (tempid != m)
 		{
-			printf("->P%d->%d", m, nextval - 1);
+			printf("->P%d->%d", tempid, nextval - 1);
 		}
+		tempid = m;
 		if (p[m].bt == 0)
 		{
 			p[m].ft = nextval;
@@ -302,20 +312,27 @@ void gantt_psjf(int n)
 			p[0].wt += p[m].wt;
 		}
 	} while (nextval < limit);
-	for (i = 1; i <= n; i++)
+	/*for (i = 1; i <= n; i++)
 	{
 		if (p[i].bt == 0 && i == n)
 		{
 			printf("->P%d->%d", m, nextval);
 		}
+	}*/
+	for (i = 1; i <= n; i++)
+	{
+		if (p[i].bt == 0 && i == n)
+		{
+			printf("->P%d->%d", tempid, nextval);
+		}
 	}
 	p[0].tat = p[0].tat / n;
 	p[0].wt = p[0].wt / n;
-	printf("\n\n-------------------TABLE----------------------------------\n");
+	/*printf("\n\n-------------------TABLE----------------------------------\n");
 	printf("\nProcess\tAT\tBT\tFT\tTAT\tWT\n");
 	for (i = 1; i <= n; i++)
 		printf("\nP%d\t%d\t%d\t%d\t%d\t%d\n", i, p[i].at, p1[i].bt, p[i].ft, p[i].tat, p[i].wt);
-	printf("\n\n-----------------------------------------------------------\n");
+	printf("\n\n-----------------------------------------------------------\n");*/
 }
 
 void gantt_rr(int n)
@@ -375,5 +392,102 @@ void gantt_rr(int n)
 	}
 	cout << "\n\n################################################################################";
 }
+
+void gantt_priority_sch(int n)
+{
+	int i, j, nextval, limit;
+	printf("\n==============================================================\n");
+	printf("\nProcess\tAT\tBT\tPRIORITY");
+
+	for (i = 1; i <= n; i++)
+	{
+		printf("\nP%d\t%d\t%d\t%d", p[i].id, p[i].at, p[i].bt, p[i].pr);
+	}
+	printf("\n==============================================================\n");
+
+	for (i = 1; i <= n; i++)
+	{
+		for (j = i; j <= n; j++)
+		{
+			if (p[i].pr > p[j].pr)
+			{
+				temp = p[j];
+				p[j] = p[i];
+				p[i] = temp;
+			}
+		}
+		/*for (i = 1; i <= n; i++)
+		{
+			for (j = i; j <= n; j++)
+			{
+				if ((p[i].pr == p[j].pr))
+				{
+					temp = p[j];
+					p[j] = p[i];
+					p[i] = temp;
+				}
+			}
+		}*/
+	}
+	for (i = 1; i <= n; i++)
+	{
+		for (j = i; j <= n; j++)
+		{
+			if ((p[i].pr == p[j].pr))
+			{
+				if (p[i].at > p[j].at)
+				{
+					temp = p[j];
+					p[j] = p[i];
+					p[i] = temp;
+				}
+			}
+		}
+	}
+
+	for (i = 1; i <= n; i++)
+	{
+		p1[i] = p[i];
+	}
+	printf("Gantt chart is as follow\n\n");
+	printf("\n%d",p[1].at);
+	nextval = p1[1].at;
+	for (i = 1; i <= n; i++)
+	{
+		nextval = nextval + p1[i].bt;
+		printf("->P%d->%d",p1[i].id,nextval);
+		p[i].ft = nextval;
+	}
+}
+
+void turnwait(int n)
+{
+	int i;
+	for (i = 1; i <= n; i++)
+	{
+		p[i].tat = p[i].ft - p[i].at;
+		p[i].wt = p[i].tat - p[i].bt;
+		p[0].tat = p[0].tat + p[i].tat;
+		p[0].wt = p[0].wt + p[i].wt;
+	}
+	p[0].tat = p[0].tat / n;
+	p[0].wt = p[0].wt / n;
+}
+
+void display(int n)
+{
+	int i;
+	cout << "\n\n-------------------TABLE----------------------------------\n";
+	printf("\nProcess\tAT\tBT\tFT\tTAT\tWT");
+	for (i = 1; i <= n; i++)
+	{
+		printf("\nP%d\t%d\t%d\t%d\t%.2f\t%.2f", p[i].id, p[i].at, p1[i].bt, p[i].ft, p[i].tat, p[i].wt);
+	}
+	cout << "\n\n-----------------------------------------------------------";
+	printf("\nAverage Turn Around Time: %.2f", p[0].tat);
+	printf("\nAverage Waiting Time: %.2f", p[0].wt);
+}
+
+
 
 
