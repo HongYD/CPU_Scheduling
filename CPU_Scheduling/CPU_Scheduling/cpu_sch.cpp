@@ -344,7 +344,7 @@ void gantt_rr(int n)
 	nextval = p1[1].at;
 	printf("Gantt Chart is as follows\n\n");
 	cout << p[1].at;
-	for (i = 1; i <= n, p[1].at <= nextval; i++)
+	for (i = 1; i <= n, p[i].at <= nextval; i++)
 	{
 		q1.push(p1[i].id);
 	}
