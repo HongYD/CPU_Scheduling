@@ -255,4 +255,125 @@ void gantt_nsjf(int n)
 	printf("\n\n-------------------------------------------------------\n");
 }
 
+void gantt_psjf(int n)
+{
+	int i, limit, nextval, m, tempid,min;
+	p[0].wt = p[0].tat = 0;
+	limit = p[1].at;
+	for (i = 1; i <= n; i++)
+	{
+		limit += p[i].bt;
+	}
+	for (i = 1; i <= n; i++)
+	{
+		p1[i] = p[i];
+	}
+
+	printf("\n\nGantt chart is as follow: \n\n");
+	printf("%d",p[1].at);
+	nextval = p[1].at;
+	m = 1;
+	tempid = 1;
+
+	do
+	{
+		min = 9999;
+		for (i = 1; p[i].at <= nextval&&i <= n; i++)
+		{
+			if (p[i].bt < min&&p[i].bt>0)
+			{
+				m = i;
+				min = p[i].bt;
+			}
+		}
+		nextval += 1;
+		p[m].bt = p[m].bt - 1;
+
+		if (tempid != m)
+		{
+			printf("->P%d->%d", m, nextval - 1);
+		}
+		if (p[m].bt == 0)
+		{
+			p[m].ft = nextval;
+			p[m].tat = p[m].ft - p[m].at;
+			p[m].wt = p[m].tat - p1[m].bt;
+			p[0].tat += p[m].tat;
+			p[0].wt += p[m].wt;
+		}
+	} while (nextval < limit);
+	for (i = 1; i <= n; i++)
+	{
+		if (p[i].bt == 0 && i == n)
+		{
+			printf("->P%d->%d", m, nextval);
+		}
+	}
+	p[0].tat = p[0].tat / n;
+	p[0].wt = p[0].wt / n;
+	printf("\n\n-------------------TABLE----------------------------------\n");
+	printf("\nProcess\tAT\tBT\tFT\tTAT\tWT\n");
+	for (i = 1; i <= n; i++)
+		printf("\nP%d\t%d\t%d\t%d\t%d\t%d\n", i, p[i].at, p1[i].bt, p[i].ft, p[i].tat, p[i].wt);
+	printf("\n\n-----------------------------------------------------------\n");
+}
+
+void gantt_rr(int n)
+{
+	int i, ts, m, nextval, nextarr;
+	nextval = p[1].at;
+	cout << "\nEnter time slice: ";
+	cin >> ts;
+	nextval = p1[1].at;
+	printf("Gantt Chart is as follows\n\n");
+	cout << p[1].at;
+	for (i = 1; i <= n, p[1].at <= nextval; i++)
+	{
+		q1.push(p1[i].id);
+	}
+	nextarr = p1[i].at;
+	while (!q1.empty())
+	{
+		m = q1.front();
+		q1.pop();
+		if (p1[m].bt >= ts)
+		{
+			nextval = nextval + ts;
+		}
+		else
+		{
+			nextval = nextval + p1[m].bt;
+		}
+		cout << "->P" << p1[m].id << "->" << nextval;
+		p1[m].bt = p1[m].bt - ts;
+
+		if (nextval < nextarr)
+		{
+			if (p1[m].bt>0)
+			{
+				q1.push(m);
+			}
+			if (p1[m].bt <= 0)
+			{
+				p[m].ft = nextval;
+			}
+		}
+		else
+		{
+			while (i <= n&&p1[i].at <= nextval)
+			{
+				q1.push(p1[i].id);
+				i++;
+			}
+			if (i <= n)
+				nextarr = p1[i].at;
+			if (p1[m].bt>0)
+				q1.push(m);
+			if (p1[m].bt <= 0)
+				p[m].ft = nextval;
+		}
+	}
+	cout << "\n\n################################################################################";
+}
+
 

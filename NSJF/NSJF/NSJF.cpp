@@ -8,7 +8,7 @@ int main()
 {
 	int i, limit, nextval, m, min, n;
 	//limit:所有process的运行时间之和
-	//nextval:目前为止最小burst time之和
+	//nextval:下一个process的开始时间
 	//m:用来存放最小Burst Time的process的编号
 	//n:process数量
 	//min：最小burst time
