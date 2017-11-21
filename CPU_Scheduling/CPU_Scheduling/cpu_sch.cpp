@@ -343,8 +343,8 @@ void gantt_rr(int n)
 	cin >> ts;
 	nextval = p1[1].at;
 	printf("Gantt Chart is as follows\n\n");
-	cout << p[1].at;
-	for (i = 1; i <= n, p[i].at <= nextval; i++)
+	cout << p1[1].at;
+	for (i = 1; i <= n, p1[i].at <= nextval; i++)
 	{
 		q1.push(p1[i].id);
 	}
@@ -353,24 +353,24 @@ void gantt_rr(int n)
 	{
 		m = q1.front();
 		q1.pop();
-		if (p1[m].bt >= ts)
+		if (p[m].bt >= ts)
 		{
 			nextval = nextval + ts;
 		}
 		else
 		{
-			nextval = nextval + p1[m].bt;
+			nextval = nextval + p[m].bt;
 		}
 		cout << "->P" << p1[m].id << "->" << nextval;
-		p1[m].bt = p1[m].bt - ts;
+		p[m].bt = p[m].bt - ts;
 
 		if (nextval < nextarr)
 		{
-			if (p1[m].bt>0)
+			if (p[m].bt>0)
 			{
 				q1.push(m);
 			}
-			if (p1[m].bt <= 0)
+			if (p[m].bt <= 0)
 			{
 				p[m].ft = nextval;
 			}
@@ -384,9 +384,9 @@ void gantt_rr(int n)
 			}
 			if (i <= n)
 				nextarr = p1[i].at;
-			if (p1[m].bt>0)
+			if (p[m].bt>0)
 				q1.push(m);
-			if (p1[m].bt <= 0)
+			if (p[m].bt <= 0)
 				p[m].ft = nextval;
 		}
 	}
